@@ -1,0 +1,11 @@
+Useful `ffmpeg' Commands
+========================
+Record:
+ffmpeg -loglevel quiet -v quiet -t 0:00:10 -f video4linux2 -s 160x120 -i /dev/video0 a.mpeg
+Convert from Video to Images:
+ffmpeg -i ./data/sample_normal.mpeg /tmp/%05d.png
+
+Useful python libraries
+=======================
+PIL: python image library. See http://www.pythonware.com/library/pil/handbook/image.htm .
+Threading: http://docs.python.org/2/library/threading.html
