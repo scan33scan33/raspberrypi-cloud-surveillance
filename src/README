@@ -1,3 +1,14 @@
+Run The Program
+===============
+To run this program, please 
+1. go to https://www.dropbox.com/developers/start/setup#python
+to install dropbox api locally.
+2. go to ./cloud/dropboxi_util.py to set APP_KEY, APP_SECRET
+and ACCESS_TYPE (even TOKEN_KEY and TOKEN_SECRET if you dont want
+to re-login manually everytime) for your specific app.
+3. run 'main.py', and it will record, detect bad videos, and upload
+to Dropbox. (bad videos are with the '_bad' prefix.)
+
 Useful `ffmpeg' Commands
 ========================
 Record:
