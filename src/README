@@ -1,6 +1,8 @@
 Run The Program
 ===============
 To run this program, please 
+0. If you are lazy for taking care of the dependencies, 
+run 'sudo ./install-deb.sh' first.
 1. go to https://www.dropbox.com/developers/start/setup#python
 to install dropbox api locally.
 2. go to ./cloud/dropboxi_util.py to set APP_KEY, APP_SECRET
@@ -24,5 +26,5 @@ ffmpeg -i ./data/sample_normal.mpeg /tmp/%05d.png
 
 Useful python libraries
 =======================
-PIL: python image library. See http://www.pythonware.com/library/pil/handbook/image.htm .
+PIL: python image library. See http://www.pythonware.com/library/pil/handbook/image.htm.
 Threading: http://docs.python.org/2/library/threading.html
