@@ -9,6 +9,12 @@ to re-login manually everytime) for your specific app.
 3. run 'main.py', and it will record, detect bad videos, and upload
 to Dropbox. (bad videos are with the '_bad' prefix.)
 
+To Do Step 1 Above (Install Dropbox)
+====================================
+1. Type 'sudo apt-get install python-setuptools'
+2. Unzip the dropbox api downloaded and type 'sudo python setup.py install'
+in the directory.
+
 Useful `ffmpeg' Commands
 ========================
 Record:
