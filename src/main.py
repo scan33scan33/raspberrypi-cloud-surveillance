@@ -13,10 +13,12 @@ sys.path.append('./cloud')
 import dropbox_util
 
 def Record(filename):
-    os.system('ffmpeg -loglevel quiet -v quiet -t 0:00:01 -f video4linux2 -s 160x120 -i /dev/video0 ' + filename)
+    os.system('ffmpeg -loglevel quiet -v quiet -t 0:00:10 -f video4linux2 -s 160x120 -i /dev/video0 ' + filename)
 
 def CheckAndUpload(cloud_filename, local_filename):
     while not os.path.exists(local_filename):
+	# This sleep is for waiting recording to be finished
+	time.sleep(15)
         continue
     flag = video_util.IsGoodVideo(local_filename)
     if flag == False:
