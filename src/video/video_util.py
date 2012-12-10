@@ -1,6 +1,13 @@
 import rgb_feature_extractor
 import sys
 import os
+import logging
+
+# Mainly for profiling logging
+# FIXME: We may want to make it prettier... (or making this in another file)
+FORMAT = '%(asctime)-15s %(message)s'
+logging.basicConfig(format=FORMAT)
+Log = logging.getLogger('video')
 
 # Compute the difference of two images(, involving different feature extractors.)
 def DiffImage(image1_filename, image2_filename):
@@ -20,15 +27,21 @@ def CompareImage(image1_filename, image2_filename):
 
 def IsGoodVideo(video_filename):
     is_good_video = True
-    os.system('rm /tmp/*.png')
-    os.system('ffmpeg -i ' + video_filename + ' /tmp/%d.png')
-    for i in range(2,100000):
-        image1_filename = '/tmp/' + str(i-1) + '.png'
+    Log.warning('ffmpeg began decoding videos to images')
+    os.system('ffmpeg -loglevel quiet -i ' + video_filename + ' /tmp/' + video_filename + '_%d.png')
+    Log.warning('ffmpeg has decoded videos to images')
+    Log.warning('abnormal video checking began')
+    # We jump 10 frames each check to make the process faster
+    # FIXME: we can make the interval parameter somewhere outside and remove '100000'
+    for i in range(11, 10, 100000):
+        image1_filename = '/tmp/' + str(i-10) + '.png'
         image2_filename = '/tmp/' + str(i) + '.png'
 	if not os.path.exists(image2_filename):
 	    break
         if CompareImage(image1_filename, image2_filename) < 0:
 	    is_good_video = False # TODO: This will modify the folder name later...
+    os.system('rm -f /tmp/' + video_filename + '*.png')
+    Log.warning('abnormal video checking ended')
     return is_good_video 
 
 

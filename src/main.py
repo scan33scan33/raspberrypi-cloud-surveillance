@@ -11,9 +11,19 @@ sys.path.append('./video')
 import video_util
 sys.path.append('./cloud')
 import dropbox_util
+import logging
+
+# Mainly for profiling logging
+# FIXME: We may want to make it prettier... (or making this in another file)
+FORMAT = '%(asctime)-15s %(message)s'
+logging.basicConfig(format=FORMAT)
+Log = logging.getLogger('video')
 
 def Record(filename):
-    os.system('ffmpeg -loglevel quiet -v quiet -t 0:00:10 -f video4linux2 -s 160x120 -i /dev/video0 ' + filename)
+    Log.warning('process 1 started recording')
+    os.system('ffmpeg -loglevel quiet -v quiet -t 0:00:10 -f video4linux2' +
+              ' -s 160x120 -i /dev/video0 ' + filename)
+    Log.warning('process 1 stopped recording')
 
 def CheckAndUpload(cloud_filename, local_filename):
     while not os.path.exists(local_filename):
@@ -39,5 +49,5 @@ if __name__ == '__main__':
         p.start()
         p2 = Process(target=CheckAndUpload, args=(cloud_filename, local_filename,))
         p2.start()
-        p.join()
-        p2.join()
+	# We should wait Process p(, which records the video,) to finish 
+	p.join()
