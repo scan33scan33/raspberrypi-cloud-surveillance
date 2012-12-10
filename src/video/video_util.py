@@ -26,17 +26,19 @@ def CompareImage(image1_filename, image2_filename):
         return 1
 
 def IsGoodVideo(video_filename):
+    video_filename_prefix = video_filename.split('.')[0].split('/')[2]
+    Log.warning('video: ' + video_filename_prefix)
     is_good_video = True
     Log.warning('ffmpeg began decoding videos to images')
-    os.system('ffmpeg -loglevel quiet -i ' + video_filename + ' /tmp/' + video_filename + '_%d.png')
+    os.system('ffmpeg -i ' + video_filename + ' /tmp/' + video_filename_prefix + '_%d.png')
     Log.warning('ffmpeg has decoded videos to images')
     Log.warning('abnormal video checking began')
     # We jump 'jump_frame' frames each check to make the process faster
     # FIXME: we can make the interval parameter somewhere outside and remove '100000'
-    jump_frame = 3
-    for i in range(1 + jump_frame, jump_frame, 100000):
-        image1_filename = '/tmp/' + str(i - jump_frame) + '.png'
-        image2_filename = '/tmp/' + str(i) + '.png'
+    jump_frame = 5
+    for i in range(1 + jump_frame, 100000, jump_frame):
+        image1_filename = '/tmp/' + video_filename_prefix + '_' + str(i - jump_frame) + '.png'
+        image2_filename = '/tmp/' + video_filename_prefix + '_' + str(i) + '.png'
 	if not os.path.exists(image2_filename):
 	    break
         if CompareImage(image1_filename, image2_filename) < 0:
