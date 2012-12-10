@@ -31,10 +31,11 @@ def IsGoodVideo(video_filename):
     os.system('ffmpeg -loglevel quiet -i ' + video_filename + ' /tmp/' + video_filename + '_%d.png')
     Log.warning('ffmpeg has decoded videos to images')
     Log.warning('abnormal video checking began')
-    # We jump 10 frames each check to make the process faster
+    # We jump 'jump_frame' frames each check to make the process faster
     # FIXME: we can make the interval parameter somewhere outside and remove '100000'
-    for i in range(11, 10, 100000):
-        image1_filename = '/tmp/' + str(i-10) + '.png'
+    jump_frame = 3
+    for i in range(1 + jump_frame, jump_frame, 100000):
+        image1_filename = '/tmp/' + str(i - jump_frame) + '.png'
         image2_filename = '/tmp/' + str(i) + '.png'
 	if not os.path.exists(image2_filename):
 	    break
