@@ -195,7 +195,7 @@ if __name__ == '__main__':
     from scipy import misc
     import sys
     image = misc.imread(sys.argv[1])
-    image = np.mean(np.double(image),axis=2)
+    #image = np.mean(np.double(image), axis=2)
     extractor = DsiftExtractor(8,16,1)
     feaArr,positions = extractor.process_image(image)
     print positions

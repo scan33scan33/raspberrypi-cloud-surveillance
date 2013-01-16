@@ -1,4 +1,5 @@
 import rgb_feature_extractor
+import dsift_feature_extractor
 import sys
 import os
 import logging
@@ -25,6 +26,36 @@ def CompareImage(image1_filename, image2_filename):
     else:
         return 1
 
+def CompareImageSIFT(image1_filename, image2_filename):
+    from scipy import misc
+    # set up extractor 
+    extractor = dsift_feature_extractor.DsiftExtractor(32, 64, 1)
+    # extractor = dsift_feature_extractor.DsiftExtractor(8, 16, 1)
+    # read images
+    image1 = misc.imread(image1_filename)
+    image2 = misc.imread(image2_filename)
+    # feature extraction
+    feaArr1, positions1 = extractor.process_image(image1)
+    feaArr2, positions2 = extractor.process_image(image2)
+    
+    # Matching
+    # Match the number of feature points
+    if abs(len(positions1[0]) - len(positions2[0])) > 1000: 
+        return False
+    # Match the feature points
+    n_match = 0
+    for i in range(len(feaArr1)):
+        for j in range(len(feaArr2)):
+            if sum(abs(feaArr1[i] - feaArr2[j])) < 1:
+                n_match += 1
+                break
+    print n_match 
+    if len(feaArr1) - n_match < 100:
+        return True
+    
+#    if len(positions1) 
+
+
 def IsGoodVideo(video_filename):
     video_filename_prefix = video_filename.split('.')[0].split('/')[2]
     Log.warning('video: ' + video_filename_prefix)
@@ -47,7 +78,15 @@ def IsGoodVideo(video_filename):
     Log.warning('abnormal video checking ended')
     return is_good_video 
 
+def TestDsiftFeatureExtractor():
+    # TODO: change to assert...
+    # expect -1
+    print CompareImageSIFT('./data/lena.png', './data/tux.png')
+    # expect 1
+    print CompareImageSIFT('./data/lena.png', './data/lena_greyscale.png')
 
 if __name__ == '__main__':
-    print IsGoodVideo(sys.argv[1])
+    # TODO: move the test out of this file.
+    TestDsiftFeatureExtractor()
+    # print IsGoodVideo(sys.argv[1])
     pass
