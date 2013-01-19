@@ -4,6 +4,10 @@ import sys
 import os
 import logging
 
+RGBDiffWarning = 20
+SIFTDiffWarning = 100
+
+
 # Mainly for profiling logging
 # FIXME: We may want to make it prettier... (or making this in another file)
 FORMAT = '%(asctime)-15s %(message)s'
@@ -21,7 +25,7 @@ def DiffImage(image1_filename, image2_filename):
     return diff
 
 def CompareImage(image1_filename, image2_filename):
-    if DiffImage(image1_filename, image2_filename) > 20:
+    if DiffImage(image1_filename, image2_filename) > RGBDiffWarning:
         return -1
     else:
         return 1
@@ -38,10 +42,6 @@ def CompareImageSIFT(image1_filename, image2_filename):
     feaArr1, positions1 = extractor.process_image(image1)
     feaArr2, positions2 = extractor.process_image(image2)
     
-    # Matching
-    # Match the number of feature points
-    if abs(len(positions1[0]) - len(positions2[0])) > 1000: 
-        return False
     # Match the feature points
     n_match = 0
     for i in range(len(feaArr1)):
@@ -49,12 +49,11 @@ def CompareImageSIFT(image1_filename, image2_filename):
             if sum(abs(feaArr1[i] - feaArr2[j])) < 1:
                 n_match += 1
                 break
-    print n_match 
-    if len(feaArr1) - n_match < 100:
+    Log.info("Number of matched keypoints by SIFT: " + str(n_match))
+    # Compute the similarity of two images by an ad-hoc function
+    if len(feaArr1) + len(feaArr2) - 2 * n_match < SIFTDiffWarning:
         return True
-    
-#    if len(positions1) 
-
+    return False
 
 def IsGoodVideo(video_filename):
     video_filename_prefix = video_filename.split('.')[0].split('/')[2]

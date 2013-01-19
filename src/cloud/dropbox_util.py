@@ -21,17 +21,13 @@ def upload(cloud_filename, local_filename):
     url = sess.build_authorize_url(request_token)
     # IMPORTANT: if you're running it without knowing TOKEN_KEY and
     # TOKEN_SECRET, uncommnet the three lines below to get them.
-    #
     # access_token = sess.obtain_access_token(request_token)
     # TOKEN_KEY = access_token.key
     # TOKEN_SECRET = access_token.secret
     sess.set_token(TOKEN_KEY, TOKEN_SECRET)
     dropbox_client = client.DropboxClient(sess)
-    # Application specific
-    # print 'Making Dir: ' + dirname
-    # client.file_create_folder(dirname)
+    # Upload local file 'local_filename' to 'cloud_filename' in the cloud
     f = open(local_filename, 'r')
-    dirname = "./"
-    response = dropbox_client.put_file(dirname + cloud_filename, f)
+    response = dropbox_client.put_file("./" + cloud_filename, f)
     print "uploaded:", response
 
